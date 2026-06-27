@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light only" />
+  <meta name="supported-color-schemes" content="light" />
   <title>Buyer Property Journey</title>
   <style>
     :root {
@@ -23,7 +25,7 @@
     }
 
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; color-scheme: light only; }
 
     body {
       margin: 0;
@@ -31,13 +33,14 @@
       font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
       color: var(--text);
       background: var(--cream);
+      color-scheme: light only;
     }
 
     .page {
       min-height: 100vh;
       background-image:
-        linear-gradient(180deg, rgba(255,255,255,0.36) 0%, rgba(247,241,232,0.84) 64%, #f7f1e8 100%),
-        linear-gradient(180deg, rgba(247,241,232,0.70), rgba(247,241,232,0.94)),
+        linear-gradient(180deg, rgba(255,255,255,0.88) 0%, rgba(247,241,232,0.92) 64%, #f7f1e8 100%),
+        linear-gradient(180deg, rgba(247,241,232,0.92), rgba(247,241,232,0.97)),
         url("assets/images/backgrd.png");
       background-size: cover;
       background-position: center top;
@@ -58,7 +61,7 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(90deg, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.60) 48%, rgba(255,255,255,0.08) 100%);
+      background: linear-gradient(90deg, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.82) 52%, rgba(255,255,255,0.50) 100%);
       pointer-events: none;
     }
 
@@ -350,11 +353,17 @@
       line-height: 1.45;
     }
 
+
+
+    input, select, textarea, button, .card, .form-head, .benefit, .chip span {
+      color-scheme: light only;
+    }
+
     @media (max-width: 760px) {
       .page {
         background-image:
-          linear-gradient(180deg, rgba(255,255,255,0.34) 0%, rgba(247,241,232,0.90) 54%, #f7f1e8 100%),
-          linear-gradient(180deg, rgba(247,241,232,0.78), rgba(247,241,232,0.96)),
+          linear-gradient(180deg, rgba(255,255,255,0.94) 0%, rgba(247,241,232,0.94) 54%, #f7f1e8 100%),
+          linear-gradient(180deg, rgba(247,241,232,0.94), rgba(247,241,232,0.98)),
           url("assets/images/backgrd.png");
         background-position: center top;
       }
@@ -365,7 +374,7 @@
       }
 
       .hero::before {
-        background: linear-gradient(180deg, rgba(255,255,255,0.90) 0%, rgba(255,255,255,0.66) 58%, rgba(255,255,255,0.12) 100%);
+        background: linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.88) 60%, rgba(255,255,255,0.62) 100%);
       }
 
       main {
@@ -565,35 +574,39 @@
       const button = document.getElementById("submitButton");
       const status = document.getElementById("formStatus");
 
-      /* Submit to Formspree in the background, then send the buyer to our own thank-you page.
-         This prevents the Formspree confirmation screen from appearing. */
+      function goToThankYou() {
+        window.location.assign(thankYouUrl);
+      }
+
+      /* Submit to Formspree in the background, then always send the buyer to our own thank-you page.
+         This avoids the Formspree confirmation screen and works more reliably across mobile browsers. */
       form.addEventListener("submit", async function (event) {
         event.preventDefault();
+
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          return;
+        }
 
         status.classList.add("show");
         status.textContent = "Submitting your property journey...";
         button.disabled = true;
         button.textContent = "Submitting...";
 
+        const formData = new FormData(form);
+
         try {
-          const response = await fetch(form.action, {
+          await fetch(form.action, {
             method: "POST",
-            body: new FormData(form),
+            body: formData,
             headers: { "Accept": "application/json" }
           });
-
-          if (response.ok) {
-            window.location.href = thankYouUrl;
-            return;
-          }
-
-          status.textContent = "The form could not be submitted. Please check required fields and try again.";
-          button.disabled = false;
-          button.textContent = "Submit my Property Journey";
+          goToThankYou();
         } catch (error) {
-          status.textContent = "Network issue. Please try again, or refresh the page and submit once more.";
-          button.disabled = false;
-          button.textContent = "Submit my Property Journey";
+          /* Last-resort fallback for strict mobile browsers.
+             This still posts to Formspree, then redirects through Formspree's _redirect field. */
+          form.removeEventListener("submit", arguments.callee);
+          form.submit();
         }
       });
     })();
