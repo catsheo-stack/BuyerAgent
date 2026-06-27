@@ -3,8 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="color-scheme" content="light only" />
-  <meta name="supported-color-schemes" content="light" />
   <title>Buyer Property Journey</title>
   <style>
     :root {
@@ -25,22 +23,21 @@
     }
 
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; color-scheme: light only; }
+    html { scroll-behavior: smooth; color-scheme: light only; background: #f7f1e8; }
 
     body {
       margin: 0;
       min-height: 100vh;
       font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
       color: var(--text);
-      background: var(--cream);
-      color-scheme: light only;
+      background: #f7f1e8 !important;
     }
 
     .page {
       min-height: 100vh;
       background-image:
-        linear-gradient(180deg, rgba(255,255,255,0.88) 0%, rgba(247,241,232,0.92) 64%, #f7f1e8 100%),
-        linear-gradient(180deg, rgba(247,241,232,0.92), rgba(247,241,232,0.97)),
+        linear-gradient(180deg, rgba(255,255,255,0.80) 0%, rgba(247,241,232,0.94) 64%, #f7f1e8 100%),
+        linear-gradient(180deg, rgba(247,241,232,0.88), rgba(247,241,232,0.98)),
         url("assets/images/backgrd.png");
       background-size: cover;
       background-position: center top;
@@ -61,7 +58,7 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(90deg, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.82) 52%, rgba(255,255,255,0.50) 100%);
+      background: linear-gradient(90deg, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.60) 48%, rgba(255,255,255,0.08) 100%);
       pointer-events: none;
     }
 
@@ -355,15 +352,20 @@
 
 
 
-    input, select, textarea, button, .card, .form-head, .benefit, .chip span {
-      color-scheme: light only;
+    @media (prefers-color-scheme: dark) {
+      body, .page { background-color: #f7f1e8 !important; color: var(--text) !important; }
+      .card { background: rgba(255,255,255,0.96) !important; }
+      .form-head { background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(255,250,241,0.90)) !important; }
+      select, input[type="text"], textarea { background: #fff !important; color: var(--text) !important; }
+      .chip span, .benefit { background: rgba(255,255,255,0.90) !important; color: var(--navy) !important; }
+      .hero::before { background: linear-gradient(180deg, rgba(255,255,255,0.94) 0%, rgba(255,255,255,0.72) 58%, rgba(255,255,255,0.20) 100%) !important; }
     }
 
     @media (max-width: 760px) {
       .page {
         background-image:
-          linear-gradient(180deg, rgba(255,255,255,0.94) 0%, rgba(247,241,232,0.94) 54%, #f7f1e8 100%),
-          linear-gradient(180deg, rgba(247,241,232,0.94), rgba(247,241,232,0.98)),
+          linear-gradient(180deg, rgba(255,255,255,0.86) 0%, rgba(247,241,232,0.96) 54%, #f7f1e8 100%),
+          linear-gradient(180deg, rgba(247,241,232,0.92), rgba(247,241,232,0.99)),
           url("assets/images/backgrd.png");
         background-position: center top;
       }
@@ -374,7 +376,7 @@
       }
 
       .hero::before {
-        background: linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.88) 60%, rgba(255,255,255,0.62) 100%);
+        background: linear-gradient(180deg, rgba(255,255,255,0.90) 0%, rgba(255,255,255,0.66) 58%, rgba(255,255,255,0.12) 100%);
       }
 
       main {
@@ -429,7 +431,7 @@
           <div class="progress-pill">Approx. 2 minutes</div>
         </div>
 
-        <form id="buyerJourneyForm" action="https://formspree.io/f/mkolnoka" method="POST">
+        <form id="buyerJourneyForm" action="https://formspree.io/f/mkolnoka" method="POST" target="formspreeFrame">
           <input type="hidden" name="_subject" value="New Buyer Property Journey Submission" />
           <input type="hidden" name="_redirect" id="form_redirect" value="https://catsheo-stack.github.io/BuyerAgent/thank-you.html" />
           <input type="hidden" name="_next" id="form_next" value="https://catsheo-stack.github.io/BuyerAgent/thank-you.html" />
@@ -552,6 +554,8 @@
     </main>
   </div>
 
+  <iframe name="formspreeFrame" id="formspreeFrame" title="Form submission" style="display:none;width:0;height:0;border:0;"></iframe>
+
   <script>
     (function () {
       const params = new URLSearchParams(window.location.search);
@@ -561,53 +565,47 @@
         if (input) input.value = params.get(field) || params.get(field.replace("client_", "")) || "";
       });
 
-      document.getElementById("submitted_page").value = window.location.href;
-      document.getElementById("submitted_at").value = new Date().toISOString();
+      const submittedPage = document.getElementById("submitted_page");
+      const submittedAt = document.getElementById("submitted_at");
+      if (submittedPage) submittedPage.value = window.location.href;
+      if (submittedAt) submittedAt.value = new Date().toISOString();
 
       const thankYouUrl = new URL("thank-you.html" + window.location.search, window.location.href).href;
       const redirectField = document.getElementById("form_redirect");
       const nextField = document.getElementById("form_next");
-      if (redirectField && /^https?:/i.test(thankYouUrl)) redirectField.value = thankYouUrl;
-      if (nextField && /^https?:/i.test(thankYouUrl)) nextField.value = thankYouUrl;
+      if (redirectField) redirectField.value = thankYouUrl;
+      if (nextField) nextField.value = thankYouUrl;
 
       const form = document.getElementById("buyerJourneyForm");
       const button = document.getElementById("submitButton");
       const status = document.getElementById("formStatus");
+      const frame = document.getElementById("formspreeFrame");
+      let submitted = false;
 
-      function goToThankYou() {
-        window.location.assign(thankYouUrl);
+      form.addEventListener("submit", function () {
+        submitted = true;
+        if (status) {
+          status.classList.add("show");
+          status.textContent = "Submitting your property journey...";
+        }
+        if (button) {
+          button.disabled = true;
+          button.textContent = "Submitting...";
+        }
+      });
+
+      if (frame) {
+        frame.addEventListener("load", function () {
+          if (!submitted) return;
+          window.location.href = thankYouUrl;
+        });
       }
 
-      /* Submit to Formspree in the background, then always send the buyer to our own thank-you page.
-         This avoids the Formspree confirmation screen and works more reliably across mobile browsers. */
-      form.addEventListener("submit", async function (event) {
-        event.preventDefault();
-
-        if (!form.checkValidity()) {
-          form.reportValidity();
-          return;
-        }
-
-        status.classList.add("show");
-        status.textContent = "Submitting your property journey...";
-        button.disabled = true;
-        button.textContent = "Submitting...";
-
-        const formData = new FormData(form);
-
-        try {
-          await fetch(form.action, {
-            method: "POST",
-            body: formData,
-            headers: { "Accept": "application/json" }
-          });
-          goToThankYou();
-        } catch (error) {
-          /* Last-resort fallback for strict mobile browsers.
-             This still posts to Formspree, then redirects through Formspree's _redirect field. */
-          form.removeEventListener("submit", arguments.callee);
-          form.submit();
-        }
+      // Fallback: if a mobile browser blocks iframe load events, still move to thank-you after Formspree has had time to receive the post.
+      form.addEventListener("submit", function () {
+        setTimeout(function () {
+          if (submitted) window.location.href = thankYouUrl;
+        }, 2200);
       });
     })();
   </script>
