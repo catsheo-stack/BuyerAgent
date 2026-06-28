@@ -159,6 +159,21 @@
 
     .field.full { grid-column: 1 / -1; }
 
+    .other-detail {
+      margin-top: 2px;
+      padding-top: 2px;
+    }
+
+    .other-detail label {
+      color: var(--bronze-dark);
+      font-size: 0.82rem;
+    }
+
+    .other-detail input {
+      border-style: dashed;
+      background: rgba(255,250,241,0.96);
+    }
+
     label, .question-title {
       font-size: 0.88rem;
       font-weight: 800;
@@ -451,10 +466,12 @@
                 <option>First Home Buyer</option>
                 <option>Owner Occupier</option>
                 <option>Investor</option>
-                <option>Upsizer</option>
-                <option>Downsizer</option>
                 <option>Other</option>
               </select>
+              <div class="other-detail">
+                <label for="buyer_profile_other">Other buyer profile details</label>
+                <input id="buyer_profile_other" name="buyer_profile_other" type="text" placeholder="If Other, please specify" />
+              </div>
             </div>
 
             <div class="field">
@@ -465,8 +482,13 @@
                 <option>Townhouse</option>
                 <option>Apartment</option>
                 <option>No Preference</option>
+                <option>Not Sure</option>
                 <option>Other</option>
               </select>
+              <div class="other-detail">
+                <label for="property_type_other">Other / not sure property type details</label>
+                <input id="property_type_other" name="property_type_other" type="text" placeholder="If Other or Not Sure, please add details" />
+              </div>
             </div>
 
             <div class="field full">
@@ -482,6 +504,11 @@
                 <label class="chip"><input type="radio" name="matters_most" value="School Zone" /><span>School Zone</span></label>
                 <label class="chip"><input type="radio" name="matters_most" value="Close to Family" /><span>Close to Family</span></label>
                 <label class="chip"><input type="radio" name="matters_most" value="Public Transport" /><span>Public Transport</span></label>
+                <label class="chip"><input type="radio" name="matters_most" value="Other" /><span>Other</span></label>
+              </div>
+              <div class="other-detail">
+                <label for="matters_most_other">Other matters most details</label>
+                <input id="matters_most_other" name="matters_most_other" type="text" placeholder="If Other, please specify" />
               </div>
             </div>
 
@@ -489,15 +516,18 @@
               <div class="question-title">One must-have feature</div>
               <div class="chips" role="radiogroup" aria-label="One must-have feature">
                 <label class="chip"><input type="radio" name="must_have" value="Garage" required /><span>Garage</span></label>
-                <label class="chip"><input type="radio" name="must_have" value="Home Office" /><span>Home Office</span></label>
                 <label class="chip"><input type="radio" name="must_have" value="Backyard" /><span>Backyard</span></label>
                 <label class="chip"><input type="radio" name="must_have" value="North-facing" /><span>North-facing</span></label>
-                <label class="chip"><input type="radio" name="must_have" value="Single Level" /><span>Single Level</span></label>
                 <label class="chip"><input type="radio" name="must_have" value="Near to Transport" /><span>Near Transport</span></label>
                 <label class="chip"><input type="radio" name="must_have" value="Gym or Pool Amenities" /><span>Gym / Pool</span></label>
                 <label class="chip"><input type="radio" name="must_have" value="Pet Friendly" /><span>Pet Friendly</span></label>
                 <label class="chip"><input type="radio" name="must_have" value="Brand New" /><span>Brand New</span></label>
+                <label class="chip"><input type="radio" name="must_have" value="Not Sure" /><span>Not Sure</span></label>
                 <label class="chip"><input type="radio" name="must_have" value="Other" /><span>Other</span></label>
+              </div>
+              <div class="other-detail">
+                <label for="must_have_other">Other / not sure must-have details</label>
+                <input id="must_have_other" name="must_have_other" type="text" placeholder="If Other or Not Sure, please add details" />
               </div>
             </div>
 
@@ -514,12 +544,12 @@
             </div>
 
             <div class="field">
-              <label for="decision_style">Decision style</label>
-              <select id="decision_style" name="decision_style" required>
+              <label for="buying_experience">Buying experience</label>
+              <select id="buying_experience" name="buying_experience" required>
                 <option value="">Please select</option>
-                <option>1 carefully selected recommendation</option>
-                <option>2-3 strong options</option>
-                <option>A few options to look at</option>
+                <option>First time</option>
+                <option>2-3 times</option>
+                <option>More than 3 times</option>
               </select>
             </div>
 
@@ -544,7 +574,7 @@
         </div>
         <div class="benefit">
           <div class="benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12h4l2-7 4 14 2-7h4"></path></svg></div>
-          <div class="benefit-text"><strong>Better shortlist</strong><span>Your must-have and decision style guide the property search.</span></div>
+          <div class="benefit-text"><strong>Better shortlist</strong><span>Your must-have and buying experience guide the property search.</span></div>
         </div>
         <div class="benefit">
           <div class="benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 7V4m8 3V4"></path><rect x="4" y="6" width="16" height="14" rx="3"></rect><path d="M4 11h16"></path><path d="M9 15h6"></path></svg></div>
